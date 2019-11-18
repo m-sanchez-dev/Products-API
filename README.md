@@ -17,8 +17,7 @@ Following this your application should start an API server with two endpoints:
 - An endpoint to retrieve a single product by its `id`
 - An endpoint that retrieves the N cheapest products (where N is a configurable number that the client can specify)
 
-Your API endpoints should return the product data as JSON with the
-following fields:
+Your API endpoints should return the product data as JSON with the following fields:
 
 - `id` as a string
 - `name` as a string
