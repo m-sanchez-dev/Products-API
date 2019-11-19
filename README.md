@@ -56,3 +56,33 @@ various factors such as the following considered:
 - Scalability
 - Extensibility
 - Some other words that end in 'ility'
+
+
+### Requirements
+
+The application needs the following external packages to work:
+
+* Flask
+* Pandas
+
+### How to run it
+
+Clone the repository on your computer
+
+````
+git clone https://github.com/sWallyx/Products-API.git
+````
+
+Enter into the folder Products-API
+
+´´´´
+cd Products-API
+´´´´
+
+Run the productAPI.py file with python3
+
+´´´´
+python3 productAPI.py
+´´´´
+
+First the application will load all the info into the memory, and then the API will start in http://0.0.0.0:5000
