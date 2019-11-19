@@ -1,9 +1,18 @@
 #!/usr/bin/python3
+# coding=utf-8
+from pprint import pprint
+from flask import Flask, request, send_from_directory, Response
+from flask_cors import CORS, cross_origin
+from flask_restful import Resource, Api
+from flask_jsonpify import jsonify
+import os
 import pandas as pd
 import urllib.request
 import json
 import gzip
 import csv
+
+app = Flask(__name__)
 
 # Products array
 products = []
@@ -51,6 +60,9 @@ class Product:
 # IN:
 # OUT:
 def addJSON_Records():
+    # Print message to terminal
+    print("Reading content from external JSON")
+
     # Open the URL of the JSON and save all the info
     with urllib.request.urlopen("https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json") as url:
         data = json.loads(url.read().decode())
@@ -69,6 +81,9 @@ def addJSON_Records():
 # IN:
 # OUT:
 def addCSV_Records():
+    # Print message to terminal
+    print("Reading content from CSV")
+
     # Get the data from the CSV
     data = pd.read_csv('products.csv.gz', compression='gzip',
                        encoding='utf-8-sig')
@@ -82,3 +97,18 @@ def addCSV_Records():
         print(tmp.getId())
 
         products.append(tmp)
+
+# Basic Route to check if the API is UP
+@app.route("/", methods=['GET'])
+def runningCheck():
+    return "<h1>The API is UP</h1>"
+
+
+
+
+if __name__ == "__main__":
+    print("Application started")
+    # addJSON_Records()
+    # addCSV_Records()
+
+    app.run(host='0.0.0.0')
