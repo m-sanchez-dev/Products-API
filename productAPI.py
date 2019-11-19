@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # coding=utf-8
 from pprint import pprint
-from flask import Flask, request, send_from_directory, Response
+from flask import Flask, request, send_from_directory, Response, abort
 from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from flask_jsonpify import jsonify
@@ -103,12 +103,37 @@ def addCSV_Records():
 def runningCheck():
     return "<h1>The API is UP</h1>"
 
+@app.route("/product/", methods=['GET'])
+def getById():
+    # Get Id from request
+    id = request.args.get('id')
 
+    # Loop all array searching for the object, on a real enviroment this would be done on the DB with indexes
+    for product in products:
+        # If maches
+        if id == product.getId():
+            # Return the found product
+            return jsonify(id=product.id,
+                        name=product.name,
+                        brand=product.brand,
+                        retailer=product.retailer,
+                        price=product.price,
+                        inStock=product.inStock
+                        )
+    
+    # No product found
+    return "<h1>No product with that ID</h1>"
 
+@app.route("/cheapestN/", methods=['GET'])
+def getCheapestN():
+    # Get n from request
+    n = request.args.get('n')
+
+    return "find n cheapest"
 
 if __name__ == "__main__":
     print("Application started")
-    # addJSON_Records()
-    # addCSV_Records()
+    addJSON_Records()
+    addCSV_Records()
 
     app.run(host='0.0.0.0')
