@@ -17,19 +17,33 @@ app = Flask(__name__)
 # Products array
 products = []
 
+# Order products array
+SoProducts = []
+
+selectedProducts = []
+
 # CSV filename
 filename = "products.csv.gz"
 
 
 # Name: keyHasValue
-# Descript: Checks if the diccionari/object has the key, if not set to 'null'
+# Descript: Checks if the diccionari/object has the key, if not set to None
 # IN: object / key
 # OUT: object value or null
 def keyHasValue(object, key):
     if key in object:
-        return object[key]
+        if object[key] is not None:
+            if object[key] is not "":
+                if key is 'price':
+                    return float(object[key])
+                else:
+                    return object[key]
+            else:
+                return None
+        else:
+            return None
     else:
-        return 'null'
+        return None
 
 # Name: checkAndReplace
 # Descript: Checks if the entering value has quotes on it, and removes them
@@ -93,10 +107,19 @@ def addCSV_Records():
         # All except Id need to have a space in front
         tmp = Product(data['Id'][i], checkAndReplace(data[' Name'][i]), checkAndReplace(data[' Brand'][i]), checkAndReplace(
             data[' Retailer'][i]), checkAndReplace(data[' Price'][i]), checkAndReplace(data[' InStock'][i]))
-        # print(data['Id'][i])
-        print(tmp.getId())
 
         products.append(tmp)
+
+def sortRecordsByPrice():
+    # Sort products by price
+    # This could be use on python 2.7 because you could compare float and NoneType
+    # SoProducts = sorted(products, key=lambda x: x.price, reverse=True)
+    
+    # For Python3 use:
+    SoProducts = sorted({product.price for product in products if product.price is not None})
+
+    # Print on terminal the list to check
+    print(SoProducts)
 
 # Basic Route to check if the API is UP
 @app.route("/", methods=['GET'])
@@ -129,11 +152,20 @@ def getCheapestN():
     # Get n from request
     n = request.args.get('n')
 
-    return "find n cheapest"
+    print(SoProducts[1])
+
+    for i in range(int(n)):
+        selectedProducts.append(SoProducts[i])
+
+    return jsonify(eqtls=[e.serialize() for e in selectedProducts])
 
 if __name__ == "__main__":
-    print("Application started")
+    print("-> Application started")
     addJSON_Records()
-    addCSV_Records()
+    # addCSV_Records()
 
+    # Creates a new object array, all of them ordered by price
+    sortRecordsByPrice()
+
+    print("-> Starting API")
     app.run(host='0.0.0.0')
