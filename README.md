@@ -75,14 +75,14 @@ git clone https://github.com/sWallyx/Products-API.git
 
 Enter into the folder Products-API
 
-´´´´
+````
 cd Products-API
-´´´´
+````
 
 Run the productAPI.py file with python3
 
-´´´´
+````
 python3 productAPI.py
-´´´´
+````
 
 First the application will load all the info into the memory, and then the API will start in http://0.0.0.0:5000
