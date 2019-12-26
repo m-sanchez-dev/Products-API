@@ -109,7 +109,7 @@ def sortRecordsByPrice():
     # Sort products by price
     # This could be use on python 2.7 because you could compare float and NoneType
     # SoProducts = sorted(products, key=lambda x: x.price, reverse=True)
-    
+
     # For Python3 use:
     SoProducts = sorted({product.price for product in products if product.price is not None})
 
