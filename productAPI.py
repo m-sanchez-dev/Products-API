@@ -1,16 +1,11 @@
 #!/usr/bin/python3
 # coding=utf-8
-from pprint import pprint
-from flask import Flask, request, send_from_directory, Response, abort
-from flask_cors import CORS, cross_origin
-from flask_restful import Resource, Api
+from flask import Flask, request, send_from_directory, Response
+from flask_cors import CORS
 from flask_jsonpify import jsonify
-import os
 import pandas as pd
 import urllib.request
 import json
-import gzip
-import csv
 
 app = Flask(__name__)
 
