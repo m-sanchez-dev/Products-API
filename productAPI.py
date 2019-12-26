@@ -3,8 +3,8 @@
 from flask import Flask, request
 from flask_jsonpify import jsonify
 import pandas as pd
-import urllib.request
 import json
+import requests
 
 app = Flask(__name__)
 
@@ -73,9 +73,8 @@ def addJSON_Records():
 
     JSON_URL = 'https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json'
     # Open the URL of the JSON and save all the info
-    req = urllib.request.Request(JSON_URL)
-    with urllib.request.urlopen(req) as response:
-        data = json.loads(response.read().decode())
+    with requests.get(JSON_URL) as response:
+        data = json.loads(response.text)
 
     for record in data:
         # Create the temporal object
