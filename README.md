@@ -14,12 +14,12 @@ it is fine to load it into memory, you do not need to use a database.
 
 Following this your application should start an API server with two endpoints:
 
-- An endpoint to retrieve a single product by its `id`
+- An endpoint to retrieve a single product by its `productId`
 - An endpoint that retrieves the N cheapest products (where N is a configurable number that the client can specify)
 
 Your API endpoints should return the product data as JSON with the following fields:
 
-- `id` as a string
+- `productId` as a string
 - `name` as a string
 - `brand` as a string
 - `retailer` as a string

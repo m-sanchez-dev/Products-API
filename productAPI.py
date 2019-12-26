@@ -50,17 +50,17 @@ def checkAndReplace(value):
 class Product:
 
     # Init the object
-    def __init__(self, id, name, brand, retailer, price, inStock):
-        self.id = id
+    def __init__(self, productId, name, brand, retailer, price, inStock):
+        self.productId = productId
         self.name = name
         self.brand = brand
         self.retailer = retailer
         self.price = price
         self.inStock = inStock
 
-    # Id getter
-    def getId(self):
-        return self.id
+    # productId getter
+    def getProductId(self):
+        return self.productId
 
 
 # Name: addJSON_Records
@@ -121,16 +121,16 @@ def runningCheck():
     return "<h1>The API is UP</h1>"
 
 @app.route("/product/", methods=['GET'])
-def getById():
+def getByProductId():
     # Get Id from request
-    id = request.args.get('id')
+    productId = request.args.get('productId')
 
     # Loop all array searching for the object, on a real enviroment this would be done on the DB with indexes
     for product in products:
         # If maches
-        if id == product.getId():
+        if productId == product.getProductId():
             # Return the found product
-            return jsonify(id=product.id,
+            return jsonify(productId=product.productId,
                         name=product.name,
                         brand=product.brand,
                         retailer=product.retailer,
