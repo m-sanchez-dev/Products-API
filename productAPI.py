@@ -71,8 +71,9 @@ def addJSON_Records():
     # Print message to terminal
     print("Reading content from external JSON")
 
+    JSON_URL = 'https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json'
     # Open the URL of the JSON and save all the info
-    req = urllib.request.Request('https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json')
+    req = urllib.request.Request(JSON_URL)
     with urllib.request.urlopen(req) as response:
         data = json.loads(response.read().decode())
 
