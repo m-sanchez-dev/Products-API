@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # coding=utf-8
-from flask import Flask, request, send_from_directory, Response
-from flask_cors import CORS
+from flask import Flask, request, send_from_directory
 from flask_jsonpify import jsonify
 import pandas as pd
 import urllib.request
