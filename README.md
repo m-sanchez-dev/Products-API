@@ -64,10 +64,10 @@ various factors such as the following considered:
 
 The application needs the following external packages to work:
 
-* Flask
-* Pandas
+* [Flask](https://www.fullstackpython.com/flask.html) - Web framework built with a small core and easy-to-extend philosophy.
+* [Pandas](https://pandas.pydata.org) - Easy-to-use data structures and data analysis tools.
 
-### How to run it
+## How to run it
 
 Clone the repository on your computer
 
