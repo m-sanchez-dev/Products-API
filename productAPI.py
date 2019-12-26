@@ -24,14 +24,14 @@ filename = "products.csv.gz"
 # Descript: Checks if the diccionari/object has the key, if not set to None
 # IN: object / key
 # OUT: object value or null
-def keyHasValue(object, key):
-    if key in object:
-        if object[key] is not None:
-            if object[key] is not "":
+def keyHasValue(customObject, key):
+    if key in customObject:
+        if customObject[key] is not None:
+            if customObject[key] is not "":
                 if key is 'price':
-                    return float(object[key])
+                    return float(customObject[key])
                 else:
-                    return object[key]
+                    return customObject[key]
             else:
                 return None
         else:
@@ -72,8 +72,9 @@ def addJSON_Records():
     print("Reading content from external JSON")
 
     # Open the URL of the JSON and save all the info
-    with urllib.request.urlopen("https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json") as url:
-        data = json.loads(url.read().decode())
+    req = urllib.request.Request('https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json')
+    with urllib.request.urlopen(req) as response:
+        data = json.loads(response.read().decode())
 
     for record in data:
         # Create the temporal object
@@ -137,7 +138,7 @@ def getByProductId():
                         price=product.price,
                         inStock=product.inStock
                         )
-    
+
     # No product found
     return "<h1>No product with that ID</h1>"
 
