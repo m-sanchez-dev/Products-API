@@ -30,14 +30,11 @@ def keyHasValue(customObject, key):
             if customObject[key] is not "":
                 if key is 'price':
                     return float(customObject[key])
-                else:
-                    return customObject[key]
-            else:
-                return None
-        else:
+                return customObject[key]
+            
             return None
-    else:
         return None
+    return None
 
 # Name: checkAndReplace
 # Descript: Checks if the entering value has quotes on it, and removes them
