@@ -1,6 +1,6 @@
 # Products-API
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4650e3c11bf44e6f8b9d7e93f547c70a)](https://www.codacy.com/manual/swallyx/Products-API?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=sWallyx/Products-API&amp;utm_campaign=Badge_Grade)
+[![CodeFactor](https://www.codefactor.io/repository/github/swallyx/products-api/badge)](https://www.codefactor.io/repository/github/swallyx/products-api)
 
 ## Task
 
