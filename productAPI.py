@@ -28,20 +28,22 @@ def keyHasValue(customObject, key):
     if key in customObject:
         if customObject[key] is not None:
             if customObject[key] is not "":
-                if key is 'price':
+                if key is "price":
                     return float(customObject[key])
                 return customObject[key]
-            
+
             return None
         return None
     return None
+
 
 # Name: checkAndReplace
 # Descript: Checks if the entering value has quotes on it, and removes them
 # IN: Value with or without quotes
 # OUT: Value without quotes
 def checkAndReplace(value):
-    return value.replace('"', '')
+    return value.replace('"', "")
+
 
 # Product class to store the products, it will need to be on the Database
 class Product:
@@ -68,15 +70,21 @@ def addJSON_Records():
     # Print message to terminal
     print("Reading content from external JSON")
 
-    JSON_URL = 'https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json'
+    JSON_URL = "https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json"
     # Open the URL of the JSON and save all the info
     with requests.get(JSON_URL) as response:
         data = json.loads(response.text)
 
     for record in data:
         # Create the temporal object
-        tmp = Product(keyHasValue(record, 'id'), keyHasValue(record, 'name'), keyHasValue(record, 'brand'), keyHasValue(
-            record, 'retailer'), keyHasValue(record, 'price'), keyHasValue(record, 'in_stock'))
+        tmp = Product(
+            keyHasValue(record, "id"),
+            keyHasValue(record, "name"),
+            keyHasValue(record, "brand"),
+            keyHasValue(record, "retailer"),
+            keyHasValue(record, "price"),
+            keyHasValue(record, "in_stock"),
+        )
 
         # Append the object to the list
         products.append(tmp)
@@ -91,16 +99,22 @@ def addCSV_Records():
     print("Reading content from CSV")
 
     # Get the data from the CSV
-    data = pd.read_csv('products.csv.gz', compression='gzip',
-                       encoding='utf-8-sig')
+    data = pd.read_csv("products.csv.gz", compression="gzip", encoding="utf-8-sig")
 
     # Get Data Lenght
     for i in range(len(data.index)):
         # All except Id need to have a space in front
-        tmp = Product(data['Id'][i], checkAndReplace(data[' Name'][i]), checkAndReplace(data[' Brand'][i]), checkAndReplace(
-            data[' Retailer'][i]), checkAndReplace(data[' Price'][i]), checkAndReplace(data[' InStock'][i]))
+        tmp = Product(
+            data["Id"][i],
+            checkAndReplace(data[" Name"][i]),
+            checkAndReplace(data[" Brand"][i]),
+            checkAndReplace(data[" Retailer"][i]),
+            checkAndReplace(data[" Price"][i]),
+            checkAndReplace(data[" InStock"][i]),
+        )
 
         products.append(tmp)
+
 
 def sortRecordsByPrice():
     # Sort products by price
@@ -108,41 +122,47 @@ def sortRecordsByPrice():
     # SoProducts = sorted(products, key=lambda x: x.price, reverse=True)
 
     # For Python3 use:
-    SoProducts = sorted({product.price for product in products if product.price is not None})
+    SoProducts = sorted(
+        {product.price for product in products if product.price is not None}
+    )
 
     # Print on terminal the list to check
     print(SoProducts)
 
+
 # Basic Route to check if the API is UP
-@app.route("/", methods=['GET'])
+@app.route("/", methods=["GET"])
 def runningCheck():
     return "<h1>The API is UP</h1>"
 
-@app.route("/product/", methods=['GET'])
+
+@app.route("/product/", methods=["GET"])
 def getByProductId():
     # Get Id from request
-    productId = request.args.get('productId')
+    productId = request.args.get("productId")
 
     # Loop all array searching for the object, on a real enviroment this would be done on the DB with indexes
     for product in products:
         # If maches
         if productId == product.getProductId():
             # Return the found product
-            return jsonify(productId=product.productId,
-                        name=product.name,
-                        brand=product.brand,
-                        retailer=product.retailer,
-                        price=product.price,
-                        inStock=product.inStock
-                        )
+            return jsonify(
+                productId=product.productId,
+                name=product.name,
+                brand=product.brand,
+                retailer=product.retailer,
+                price=product.price,
+                inStock=product.inStock,
+            )
 
     # No product found
     return "<h1>No product with that ID</h1>"
 
-@app.route("/cheapestN/", methods=['GET'])
+
+@app.route("/cheapestN/", methods=["GET"])
 def getCheapestN():
     # Get n from request
-    n = request.args.get('n')
+    n = request.args.get("n")
 
     print(SoProducts[1])
 
@@ -150,6 +170,7 @@ def getCheapestN():
         selectedProducts.append(SoProducts[i])
 
     return jsonify(eqtls=[e.serialize() for e in selectedProducts])
+
 
 if __name__ == "__main__":
     print("-> Application started")
@@ -160,4 +181,4 @@ if __name__ == "__main__":
     sortRecordsByPrice()
 
     print("-> Starting API")
-    app.run(host='127.0.0.1')
+    app.run(host="127.0.0.1")
