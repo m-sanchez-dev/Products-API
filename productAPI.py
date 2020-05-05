@@ -27,8 +27,8 @@ filename = "products.csv.gz"
 def keyHasValue(customObject, key):
     if key in customObject:
         if customObject[key] is not None:
-            if customObject[key] is not "":
-                if key is "price":
+            if customObject[key] != "":
+                if key == "price":
                     return float(customObject[key])
                 return customObject[key]
 
