@@ -7,7 +7,7 @@ verify_ssl = true
 black = "*"
 
 [packages]
-pandas = "==1.0.3"
+pandas = "==1.0.4"
 requests = "==2.23.0"
 Flask = "==1.1.2"
 Flask-Jsonpify = "==1.5.0"
