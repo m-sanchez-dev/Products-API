@@ -78,7 +78,7 @@ def sortRecordsByPrice():
     return sorted(
         {product.price for product in products if product.price is not None}
     )
-    product.sort(key=)
+    product.sort(key=price)
 
 
 def addJSON_Records():

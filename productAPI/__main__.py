@@ -82,7 +82,7 @@ def getCheapestN(number_of_products) -> json:
 
 if __name__ == '__main__':
     print('-> Application started')
-    addJSON_Records()
+    ##addJSON_Records()
     # addCSV_Records()
 
     # Creates a new object array, all of them ordered by price

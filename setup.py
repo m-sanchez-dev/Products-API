@@ -6,7 +6,7 @@ setup(
     version="0.0.1",
     description="Small API that works with products read from json file.",
     author="sWallyx <mikelsmartinez@aol.com>",
-    keywords=["python", "scripts", "api"],
+    keywords=["python", "scripts", "api", "flask"],
     classifiers=[],
     install_requires=["pandas", "requests", "Flask", "flask_jsonpify"],
     setup_requires=[],
