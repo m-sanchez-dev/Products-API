@@ -8,10 +8,9 @@ import requests
 from flask import Flask, request
 from flask_jsonpify import jsonify
 
-from utils.functions import *
-from utils.globals import SORTED_PRODUCTS, products, SORTED, PRODUCTS_FILE
-
 from classes import product
+from utils.functions import *
+from utils.globals import PRODUCTS_FILE, SORTED, SORTED_PRODUCTS, products
 
 app = Flask(__name__)
 
