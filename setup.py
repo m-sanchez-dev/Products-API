@@ -8,7 +8,7 @@ setup(
     author="sWallyx <mikelsmartinez@aol.com>",
     keywords=["python", "scripts", "api"],
     classifiers=[],
-    install_requires=["pandas", "requests", "Flask", "Flask-Jsonpify"],
+    install_requires=["pandas", "requests", "Flask", "flask_jsonpify"],
     setup_requires=[],
     tests_require=[],
     packages=find_packages(),

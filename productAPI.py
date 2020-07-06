@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 # coding=utf-8
+""" Main API file """
 import json
 
 import pandas as pd
@@ -7,50 +8,16 @@ import requests
 from flask import Flask, request
 from flask_jsonpify import jsonify
 
+from utils.functions import *
+from utils.globals import *
+
 app = Flask(__name__)
-
-# Products array
-products = []
-
-# Order products array
-SoProducts = []
-
-selectedProducts = []
-
-# CSV filename
-PRODUCTS_FILE = 'data/products.csv.gz'
-
-
-# Name: keyHasValue
-# Description: Checks if the dictionary/object has the key, if not set to None
-# IN: object / key
-# OUT: object value or null
-def keyHasValue(customObject, key):
-    if key in customObject:
-        if customObject[key] is not None:
-            if customObject[key] != '':
-                if key == 'price':
-                    return float(customObject[key])
-                return customObject[key]
-
-            return None
-        return None
-    return None
-
-
-# Name: checkAndReplace
-# Description: Checks if the entering value has quotes on it, and removes them
-# IN: Value with or without quotes
-# OUT: Value without quotes
-def checkAndReplace(value):
-    return value.replace('"', '')
-
 
 # Product class to store the products, it will need to be on the Database
 class Product:
 
     # Init the object
-    def __init__(self, productId: str, name: str, brand: str, retailer: str, price, inStock: str):
+    def __init__(self, productId: str, name: str, brand: str, retailer: str, price: float, inStock: str):
         self.productId = productId
         self.name = name
         self.brand = brand
@@ -102,7 +69,7 @@ def addCSV_Records():
     # Get the data from the CSV
     data = pd.read_csv(PRODUCTS_FILE, compression='gzip', encoding='utf-8-sig')
 
-    # Get Data Lenght
+    # Get Data Length
     for i in range(len(data.index)):
         # All except Id need to have a space in front
         tmp = Product(
@@ -120,19 +87,19 @@ def addCSV_Records():
 def sortRecordsByPrice():
     # Sort products by price
     # This could be use on python 2.7 because you could compare float and NoneType
-    # SoProducts = sorted(products, key=lambda x: x.price, reverse=True)
+    # SortedProducts = sorted(products, key=lambda x: x.price, reverse=True)
 
     # For Python3 use:
-    SoProducts = sorted(
+    SortedProducts = sorted(
         {product.price for product in products if product.price is not None}
     )
 
-
+    SORTED = True
 
 # Basic Route to check if the API is UP
 @app.route('/', methods=['GET'])
 def status() -> json:
-    return jsonify('message': 'Application is UP!', 'status': 200})
+    return jsonify({'message': 'Application is UP!', 'status': 200})
 
 
 @app.route('/product/', methods=['GET'])
@@ -140,32 +107,48 @@ def getByProductId() -> json:
     # Get Id from request
     productId = request.args.get('productId')
 
-    # Loop all array searching for the object, on a real environment this would be done on the DB with indexes
-    for product in products:
-        # If maches
-        if productId == product.getProductId():
-            # Return the found product
-            return jsonify(
-                productId=product.productId,
-                name=product.name,
-                brand=product.brand,
-                retailer=product.retailer,
-                price=product.price,
-                inStock=product.inStock,
-            )
+    # Check if product id has been send
+    if productId:
+
+        # Loop all array searching for the object, on a real environment this would be done on the DB with indexes
+        for product in products:
+            # If maches
+            if productId == product.getProductId():
+                # Return the found product
+                return jsonify(
+                    productId=product.productId,
+                    name=product.name,
+                    brand=product.brand,
+                    retailer=product.retailer,
+                    price=product.price,
+                    inStock=product.inStock,
+                )
 
     return jsonify({'message': 'No product with that ID!', 'status': 404})
 
 
 @app.route('/cheapest/', methods=['GET'])
-def getCheapestN():
-    # Get n from request
+def getCheapestN() -> json:
+    """
+        Finds the N cheapes products on the saved variable
+
+        Returns:
+            json: json object with the requested products
+
+    """
     number_of_products = request.args.get('number')
 
-    for i in range(int(number_of_products)):
-        selectedProducts.append(SoProducts[i])
+    if number_of_products:
 
-    return jsonify(eqtls=[e.serialize() for e in selectedProducts])
+        if not SORTED:
+            sortRecordsByPrice()
+
+        for i in range(int(number_of_products)):
+            selectedProducts.append(SortedProducts[i])
+
+        return jsonify(eqtls=[e.serialize() for e in selectedProducts])
+
+    return jsonify({'message': 'You need to specify how many products you want to see', 'status': 400}) 
 
 
 if __name__ == '__main__':
@@ -174,7 +157,7 @@ if __name__ == '__main__':
     # addCSV_Records()
 
     # Creates a new object array, all of them ordered by price
-    sortRecordsByPrice()
+    
 
     print('-> Starting API')
     app.run(host='127.0.0.1')
