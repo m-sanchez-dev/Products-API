@@ -18,7 +18,7 @@ SoProducts = []
 selectedProducts = []
 
 # CSV filename
-filename = "data/products.csv.gz"
+PRODUCTS_FILE = "data/products.csv.gz"
 
 
 # Name: keyHasValue
@@ -59,7 +59,7 @@ class Product:
         self.inStock = inStock
 
     # productId getter
-    def getProductId(self):
+    def getProductId(self) -> int:
         return self.productId
 
 
@@ -100,7 +100,7 @@ def addCSV_Records():
     print("Reading content from CSV")
 
     # Get the data from the CSV
-    data = pd.read_csv("products.csv.gz", compression="gzip", encoding="utf-8-sig")
+    data = pd.read_csv(PRODUCTS_FILE, compression="gzip", encoding="utf-8-sig")
 
     # Get Data Lenght
     for i in range(len(data.index)):
@@ -133,12 +133,12 @@ def sortRecordsByPrice():
 
 # Basic Route to check if the API is UP
 @app.route("/", methods=["GET"])
-def runningCheck():
+def status() -> json:
     return jsonify({"message": "Application is UP!", "status": 200})
 
 
 @app.route("/product/", methods=["GET"])
-def getByProductId():
+def getByProductId() -> json:
     # Get Id from request
     productId = request.args.get("productId")
 
@@ -156,18 +156,17 @@ def getByProductId():
                 inStock=product.inStock,
             )
 
-    # No product found
-    return "<h1>No product with that ID</h1>"
+    return jsonify({"message": "No product with that ID!", "status": 404})
 
 
-@app.route("/cheapestN/", methods=["GET"])
+@app.route("/cheapest/", methods=["GET"])
 def getCheapestN():
     # Get n from request
-    n = request.args.get("n")
+    number_of_products = request.args.get("number")
 
     print(SoProducts[1])
 
-    for i in range(int(n)):
+    for i in range(int(number_of_products)):
         selectedProducts.append(SoProducts[i])
 
     return jsonify(eqtls=[e.serialize() for e in selectedProducts])
