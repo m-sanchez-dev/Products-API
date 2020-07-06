@@ -18,11 +18,11 @@ SoProducts = []
 selectedProducts = []
 
 # CSV filename
-filename = "products.csv.gz"
+filename = "data/products.csv.gz"
 
 
 # Name: keyHasValue
-# Descript: Checks if the diccionari/object has the key, if not set to None
+# Description: Checks if the dictionary/object has the key, if not set to None
 # IN: object / key
 # OUT: object value or null
 def keyHasValue(customObject, key):
@@ -39,7 +39,7 @@ def keyHasValue(customObject, key):
 
 
 # Name: checkAndReplace
-# Descript: Checks if the entering value has quotes on it, and removes them
+# Description: Checks if the entering value has quotes on it, and removes them
 # IN: Value with or without quotes
 # OUT: Value without quotes
 def checkAndReplace(value):
@@ -64,7 +64,7 @@ class Product:
 
 
 # Name: addJSON_Records
-# Descript: Takes the JSON file from URL and decodes de content to be able to work with it. Then it saves all records on a Product array.
+# Description: Takes the JSON file from URL and decodes de content to be able to work with it. Then it saves all records on a Product array.
 # IN:
 # OUT:
 def addJSON_Records():
@@ -92,7 +92,7 @@ def addJSON_Records():
 
 
 # Name: addCSV_Records
-# Descript: Read the content of the CSV using pandas read_csv. Then it saves all records on a Product array
+# Description: Read the content of the CSV using pandas read_csv. Then it saves all records on a Product array
 # IN:
 # OUT:
 def addCSV_Records():
@@ -134,7 +134,7 @@ def sortRecordsByPrice():
 # Basic Route to check if the API is UP
 @app.route("/", methods=["GET"])
 def runningCheck():
-    return "<h1>The API is UP</h1>"
+    return jsonify({"message": "Application is UP!", "status": 200})
 
 
 @app.route("/product/", methods=["GET"])
@@ -142,7 +142,7 @@ def getByProductId():
     # Get Id from request
     productId = request.args.get("productId")
 
-    # Loop all array searching for the object, on a real enviroment this would be done on the DB with indexes
+    # Loop all array searching for the object, on a real environment this would be done on the DB with indexes
     for product in products:
         # If maches
         if productId == product.getProductId():
