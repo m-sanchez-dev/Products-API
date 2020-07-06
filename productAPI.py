@@ -18,7 +18,7 @@ SoProducts = []
 selectedProducts = []
 
 # CSV filename
-PRODUCTS_FILE = "data/products.csv.gz"
+PRODUCTS_FILE = 'data/products.csv.gz'
 
 
 # Name: keyHasValue
@@ -28,8 +28,8 @@ PRODUCTS_FILE = "data/products.csv.gz"
 def keyHasValue(customObject, key):
     if key in customObject:
         if customObject[key] is not None:
-            if customObject[key] != "":
-                if key == "price":
+            if customObject[key] != '':
+                if key == 'price':
                     return float(customObject[key])
                 return customObject[key]
 
@@ -43,14 +43,14 @@ def keyHasValue(customObject, key):
 # IN: Value with or without quotes
 # OUT: Value without quotes
 def checkAndReplace(value):
-    return value.replace('"', "")
+    return value.replace('"', '')
 
 
 # Product class to store the products, it will need to be on the Database
 class Product:
 
     # Init the object
-    def __init__(self, productId, name, brand, retailer, price, inStock):
+    def __init__(self, productId: str, name: str, brand: str, retailer: str, price, inStock: str):
         self.productId = productId
         self.name = name
         self.brand = brand
@@ -59,7 +59,7 @@ class Product:
         self.inStock = inStock
 
     # productId getter
-    def getProductId(self) -> int:
+    def getProductId(self) -> str:
         return self.productId
 
 
@@ -69,9 +69,9 @@ class Product:
 # OUT:
 def addJSON_Records():
     # Print message to terminal
-    print("Reading content from external JSON")
+    print('Reading content from external JSON')
 
-    JSON_URL = "https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json"
+    JSON_URL = 'https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json'
     # Open the URL of the JSON and save all the info
     with requests.get(JSON_URL) as response:
         data = json.loads(response.text)
@@ -79,12 +79,12 @@ def addJSON_Records():
     for record in data:
         # Create the temporal object
         tmp = Product(
-            keyHasValue(record, "id"),
-            keyHasValue(record, "name"),
-            keyHasValue(record, "brand"),
-            keyHasValue(record, "retailer"),
-            keyHasValue(record, "price"),
-            keyHasValue(record, "in_stock"),
+            keyHasValue(record, 'id'),
+            keyHasValue(record, 'name'),
+            keyHasValue(record, 'brand'),
+            keyHasValue(record, 'retailer'),
+            keyHasValue(record, 'price'),
+            keyHasValue(record, 'in_stock'),
         )
 
         # Append the object to the list
@@ -97,21 +97,21 @@ def addJSON_Records():
 # OUT:
 def addCSV_Records():
     # Print message to terminal
-    print("Reading content from CSV")
+    print('Reading content from CSV')
 
     # Get the data from the CSV
-    data = pd.read_csv(PRODUCTS_FILE, compression="gzip", encoding="utf-8-sig")
+    data = pd.read_csv(PRODUCTS_FILE, compression='gzip', encoding='utf-8-sig')
 
     # Get Data Lenght
     for i in range(len(data.index)):
         # All except Id need to have a space in front
         tmp = Product(
-            data["Id"][i],
-            checkAndReplace(data[" Name"][i]),
-            checkAndReplace(data[" Brand"][i]),
-            checkAndReplace(data[" Retailer"][i]),
-            checkAndReplace(data[" Price"][i]),
-            checkAndReplace(data[" InStock"][i]),
+            data['Id'][i],
+            checkAndReplace(data[' Name'][i]),
+            checkAndReplace(data[' Brand'][i]),
+            checkAndReplace(data[' Retailer'][i]),
+            checkAndReplace(data[' Price'][i]),
+            checkAndReplace(data[' InStock'][i]),
         )
 
         products.append(tmp)
@@ -127,20 +127,18 @@ def sortRecordsByPrice():
         {product.price for product in products if product.price is not None}
     )
 
-    # Print on terminal the list to check
-    print(SoProducts)
 
 
 # Basic Route to check if the API is UP
-@app.route("/", methods=["GET"])
+@app.route('/', methods=['GET'])
 def status() -> json:
-    return jsonify({"message": "Application is UP!", "status": 200})
+    return jsonify('message': 'Application is UP!', 'status': 200})
 
 
-@app.route("/product/", methods=["GET"])
+@app.route('/product/', methods=['GET'])
 def getByProductId() -> json:
     # Get Id from request
-    productId = request.args.get("productId")
+    productId = request.args.get('productId')
 
     # Loop all array searching for the object, on a real environment this would be done on the DB with indexes
     for product in products:
@@ -156,15 +154,13 @@ def getByProductId() -> json:
                 inStock=product.inStock,
             )
 
-    return jsonify({"message": "No product with that ID!", "status": 404})
+    return jsonify({'message': 'No product with that ID!', 'status': 404})
 
 
-@app.route("/cheapest/", methods=["GET"])
+@app.route('/cheapest/', methods=['GET'])
 def getCheapestN():
     # Get n from request
-    number_of_products = request.args.get("number")
-
-    print(SoProducts[1])
+    number_of_products = request.args.get('number')
 
     for i in range(int(number_of_products)):
         selectedProducts.append(SoProducts[i])
@@ -172,13 +168,13 @@ def getCheapestN():
     return jsonify(eqtls=[e.serialize() for e in selectedProducts])
 
 
-if __name__ == "__main__":
-    print("-> Application started")
+if __name__ == '__main__':
+    print('-> Application started')
     addJSON_Records()
     # addCSV_Records()
 
     # Creates a new object array, all of them ordered by price
     sortRecordsByPrice()
 
-    print("-> Starting API")
-    app.run(host="127.0.0.1")
+    print('-> Starting API')
+    app.run(host='127.0.0.1')
