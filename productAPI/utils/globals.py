@@ -6,8 +6,8 @@ products = []
 # Order products array
 SORTED_PRODUCTS = []
 
-# Boolean to know if products have been sorted
-SORTED = False
-
 # CSV filename
-PRODUCTS_FILE = 'data/products.csv.gz'
+PRODUCTS_FILE = "productAPI/data/products.csv.gz"
+
+# Json file with product information
+JSON_URL = "https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json"

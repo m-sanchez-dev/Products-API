@@ -1,16 +1,12 @@
-#!/usr/bin/python3
 # coding=utf-8
 """ Main API file """
 import json
 
-import pandas as pd
-import requests
-from flask import Flask, request
+from flask import Flask
 from flask_jsonpify import jsonify
 
-from classes import product
-from utils.functions import *
-from utils.globals import PRODUCTS_FILE, SORTED, SORTED_PRODUCTS, products
+from utils.functions import sortRecordsByPrice, addJSON_Records, addCSV_Records
+from utils.globals import SORTED_PRODUCTS, products
 
 app = Flask(__name__)
 
@@ -35,10 +31,11 @@ def getByProductId(product_id) -> json:
 
     # Check if product id has been send
     if product_id:
-        # Loop all array searching for the object, on a real environment this would be done on the DB with indexes
+        # Loop all array searching for the object, on a real environment this
+        # would be done on the DB with indexes
         for product in products:
             # If maches
-            if product_id == product.getProductId():
+            if product_id == product.getId():
                 return jsonify(
                     productId=product_id,
                     name=product.name,
@@ -64,14 +61,14 @@ def getCheapestN(number_of_products) -> json:
     if number_of_products:
         selectedProducts = []
 
-        if not SORTED:
-            print("Products need to be sorted")
-            SORTED_PRODUCTS = sortRecordsByPrice()
+        print("Products need to be sorted")
+        sortedList = sortRecordsByPrice()
 
-        print(SORTED_PRODUCTS)
+        # print(sortedList)
 
         for i in range(int(number_of_products)):
-            selectedProducts.append(SORTED_PRODUCTS[i])
+            print(sortedList[i].name)
+            selectedProducts.append(sortedList[i])
 
         # return jsonify(eqtls=[e.serialize() for e in selectedProducts])
         return jsonify(selectedProducts)
@@ -86,8 +83,8 @@ def getCheapestN(number_of_products) -> json:
 
 if __name__ == "__main__":
     print("-> Application started")
-    ##addJSON_Records()
-    # addCSV_Records()
+    # addJSON_Records()
+    addCSV_Records()
 
     # Creates a new object array, all of them ordered by price
 

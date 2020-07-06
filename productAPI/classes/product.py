@@ -1,8 +1,18 @@
 """ Product class """
+
+
 class Product:
 
     # Init the object
-    def __init__(self, productId: str, name: str, brand: str, retailer: str, price: float, inStock: str):
+    def __init__(
+        self,
+        productId: str,
+        name: str,
+        brand: str,
+        retailer: str,
+        price: float,
+        inStock: str,
+    ):
         self.productId = productId
         self.name = name
         self.brand = brand
@@ -11,5 +21,5 @@ class Product:
         self.inStock = inStock
 
     # productId getter
-    def getProductId(self) -> str:
+    def getId(self) -> str:
         return self.productId

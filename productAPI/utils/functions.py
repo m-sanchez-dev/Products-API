@@ -1,4 +1,16 @@
 """ File with many util functions """
+import json
+
+import pandas as pd
+import requests
+
+from productAPI.classes.product import Product
+from productAPI.utils.globals import (
+    PRODUCTS_FILE,
+    JSON_URL,
+    # SORTED_PRODUCTS,
+    products,
+)
 
 
 def keyHasValue(customObject: object, key: str):
@@ -8,7 +20,7 @@ def keyHasValue(customObject: object, key: str):
         Args:
             customObjects {object}: Object to check
             key {str}: Key to be checked
-        
+
         Returns:
             object value or null
     """
@@ -30,7 +42,7 @@ def checkAndReplace(value: str) -> str:
 
         Args:
             value {str}: Value to be formated
-        
+
         Returns:
             formated value without quotes
     """
@@ -70,25 +82,24 @@ def addCSV_Records():
 
 def sortRecordsByPrice():
     """
-        Sort products by price
-        This could be use on python 2.7 because you could compare float and NoneType
-        SortedProducts = sorted(products, key=lambda x: x.price, reverse=True)
+        Sort products by price. This could be use on python 2.7
+        because you could compare float and NoneType
+        sorted(products, key=lambda x: x.price, reverse=True)
     """
 
-    SORTED = True
-
-    return sorted({product.price for product in products if product.price is not None})
-    product.sort(key=price)
+    # return sorted({product.price for product in products if product.price is not None})
+    # products.sort(key=nonesorter)
+    return sorted(products, key=lambda x: (x.price is None, x.price))
 
 
 def addJSON_Records():
-    """     
-        Takes the JSON file from URL and decodes de content to be able to work with it. Then it saves all records on a Product array.
+    """
+        Takes the JSON file from URL and decodes de content to be able to work
+        with it. Then it saves all records on a Product array.
     """
     # Print message to terminal
     print("Reading content from external JSON")
 
-    JSON_URL = "https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json"
     # Open the URL of the JSON and save all the info
     with requests.get(JSON_URL) as response:
         data = json.loads(response.text)
