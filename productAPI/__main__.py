@@ -16,16 +16,16 @@ from classes import product
 app = Flask(__name__)
 
 
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def status() -> json:
     """
         Status check on main ('/') route.
         Returns a simple 200, with a message.
     """
-    return jsonify({'message': 'Application is UP!', 'status': 200})
+    return jsonify({"message": "Application is UP!", "status": 200})
 
 
-@app.route('/product/<product_id>', methods=['GET'])
+@app.route("/product/<product_id>", methods=["GET"])
 def getByProductId(product_id) -> json:
     """
         Returns the product that matches the given ID
@@ -49,10 +49,10 @@ def getByProductId(product_id) -> json:
                     inStock=product.inStock,
                 )
 
-    return jsonify({'message': 'No product with that ID!', 'status': 404})
+    return jsonify({"message": "No product with that ID!", "status": 404})
 
 
-@app.route('/cheapest/<number_of_products>', methods=['GET'])
+@app.route("/cheapest/<number_of_products>", methods=["GET"])
 def getCheapestN(number_of_products) -> json:
     """
         Finds the N cheapes products on the saved variable
@@ -66,7 +66,7 @@ def getCheapestN(number_of_products) -> json:
         selectedProducts = []
 
         if not SORTED:
-            print('Products need to be sorted')
+            print("Products need to be sorted")
             SORTED_PRODUCTS = sortRecordsByPrice()
 
         print(SORTED_PRODUCTS)
@@ -74,19 +74,23 @@ def getCheapestN(number_of_products) -> json:
         for i in range(int(number_of_products)):
             selectedProducts.append(SORTED_PRODUCTS[i])
 
-        #return jsonify(eqtls=[e.serialize() for e in selectedProducts])
+        # return jsonify(eqtls=[e.serialize() for e in selectedProducts])
         return jsonify(selectedProducts)
 
-    return jsonify({'message': 'You need to specify how many products you want to see', 'status': 400}) 
+    return jsonify(
+        {
+            "message": "You need to specify how many products you want to see",
+            "status": 400,
+        }
+    )
 
 
-if __name__ == '__main__':
-    print('-> Application started')
+if __name__ == "__main__":
+    print("-> Application started")
     ##addJSON_Records()
     # addCSV_Records()
 
     # Creates a new object array, all of them ordered by price
-    
 
-    print('-> Starting API')
-    app.run(host='127.0.0.1')
+    print("-> Starting API")
+    app.run(host="127.0.0.1")
