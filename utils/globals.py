@@ -4,12 +4,10 @@
 products = []
 
 # Order products array
-SortedProducts = []
+SORTED_PRODUCTS = []
 
 # Boolean to know if products have been sorted
 SORTED = False
-
-selectedProducts = []
 
 # CSV filename
 PRODUCTS_FILE = 'data/products.csv.gz'

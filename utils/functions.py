@@ -34,3 +34,76 @@ def checkAndReplace(value: str) -> str:
             formated value without quotes
     """
     return value.replace('"', '')
+
+
+def nonesorter(value):
+    if not value:
+        return ""
+    return value
+
+
+def addCSV_Records():
+    """
+        Read the content of the CSV using pandas read_csv. Then it saves all records on a Product array
+    """
+    # Print message to terminal
+    print('Reading content from CSV')
+
+    # Get the data from the CSV
+    data = pd.read_csv(PRODUCTS_FILE, compression='gzip', encoding='utf-8-sig')
+
+    # Get Data Length
+    for i in range(len(data.index)):
+        # All except Id need to have a space in front
+        tmp = Product(
+            data['Id'][i],
+            checkAndReplace(data[' Name'][i]),
+            checkAndReplace(data[' Brand'][i]),
+            checkAndReplace(data[' Retailer'][i]),
+            checkAndReplace(data[' Price'][i]),
+            checkAndReplace(data[' InStock'][i]),
+        )
+
+        products.append(tmp)
+
+def sortRecordsByPrice():
+    """
+        Sort products by price
+        This could be use on python 2.7 because you could compare float and NoneType
+        SortedProducts = sorted(products, key=lambda x: x.price, reverse=True)
+    """
+
+    SORTED = True
+
+    return sorted(
+        {product.price for product in products if product.price is not None}
+    )
+    product.sort(key=)
+
+
+def addJSON_Records():
+    """     
+        Takes the JSON file from URL and decodes de content to be able to work with it. Then it saves all records on a Product array.
+    """
+    # Print message to terminal
+    print('Reading content from external JSON')
+
+    JSON_URL = 'https://s3-eu-west-1.amazonaws.com/pricesearcher-code-tests/python-software-developer/products.json'
+    # Open the URL of the JSON and save all the info
+    with requests.get(JSON_URL) as response:
+        data = json.loads(response.text)
+
+    for record in data:
+        # Create the temporal object
+        tmp = Product(
+            keyHasValue(record, 'id'),
+            keyHasValue(record, 'name'),
+            keyHasValue(record, 'brand'),
+            keyHasValue(record, 'retailer'),
+            keyHasValue(record, 'price'),
+            keyHasValue(record, 'in_stock'),
+        )
+
+        # Append the object to the list
+        products.append(tmp)
+
